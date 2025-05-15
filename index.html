@@ -5,10 +5,12 @@
   <title>🐔 মুরগি GPT</title>
   <style>
     body { font-family: sans-serif; background: #fffbe6; padding: 20px; text-align: center; }
-    .chatbox { max-width: 500px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; }
+    .chatbox { max-width: 500px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; height: 400px; overflow-y: auto; }
     .message { margin: 10px; padding: 10px; border-radius: 5px; }
     .user { background: #d0f0ff; text-align: right; }
     .bot { background: #e0ffd8; text-align: left; }
+    input { width: 70%; padding: 10px; }
+    button { padding: 10px; }
   </style>
 </head>
 <body>
@@ -16,25 +18,15 @@
   <div id="chat" class="chatbox">
     <div class="message bot">কক কক! আমি মুরগি GPT। কী জানতে চাও?</div>
   </div>
-  <input type="text" id="userInput" placeholder="এখানে লিখুন..." style="width:70%; padding:10px;" />
-  <button onclick="sendMessage()" style="padding:10px;">পাঠান</button>
+  <input type="text" id="userInput" placeholder="এখানে লিখুন..." />
+  <button onclick="sendMessage()">পাঠান</button>
 
   <script>
-    const replies = [
-      "কক কক কুড়র! আমি এখনো ডিম দেইনি!",
-      "ভুট্টা কোথায়? কুড় কুড়!",
-      "মোরগটা আজও দম্ভ করছে!",
-      "আমি এখন ডিমের উপর বসে আছি, বিরক্ত করো না!",
-      "তুমি মানুষ, আমি মুরগি, আমাদের কি প্রেম সম্ভব? 🐔❤️",
-      "কুড় কুড় কুড়র! এটা মুরগি ভাষায় 'সুপ্রভাত!'",
-      "কক কক! আজ ডিম নেই, শুধুই হাসি!"
-    ];
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("userInput");
 
-    function sendMessage() {
-      const input = document.getElementById("userInput");
-      const chat = document.getElementById("chat");
-
-      const userText = input.value;
+    async function sendMessage() {
+      const userText = input.value.trim();
       if (!userText) return;
 
       const userDiv = document.createElement("div");
@@ -42,12 +34,25 @@
       userDiv.textContent = userText;
       chat.appendChild(userDiv);
 
+      input.value = "";
+
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [{ role: "user", content: userText }]
+        }),
+      });
+
+      const data = await response.json();
+      const botReply = data.choices?.[0]?.message?.content || "কক কুড়র! কিছু বুঝতে পারিনি!";
+
       const botDiv = document.createElement("div");
       botDiv.className = "message bot";
-      botDiv.textContent = replies[Math.floor(Math.random() * replies.length)];
+      botDiv.textContent = botReply;
       chat.appendChild(botDiv);
 
-      input.value = "";
+      chat.scrollTop = chat.scrollHeight;
     }
   </script>
 </body>
