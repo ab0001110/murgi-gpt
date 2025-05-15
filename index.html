@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <title>🐔 মুরগি GPT</title>
+  <style>
+    body { font-family: sans-serif; background: #fffbe6; padding: 20px; text-align: center; }
+    .chatbox { max-width: 500px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; }
+    .message { margin: 10px; padding: 10px; border-radius: 5px; }
+    .user { background: #d0f0ff; text-align: right; }
+    .bot { background: #e0ffd8; text-align: left; }
+  </style>
+</head>
+<body>
+  <h1>🐔 মুরগি GPT</h1>
+  <div id="chat" class="chatbox">
+    <div class="message bot">কক কক! আমি মুরগি GPT। কী জানতে চাও?</div>
+  </div>
+  <input type="text" id="userInput" placeholder="এখানে লিখুন..." style="width:70%; padding:10px;" />
+  <button onclick="sendMessage()" style="padding:10px;">পাঠান</button>
+
+  <script>
+    const replies = [
+      "কক কক কুড়র! আমি এখনো ডিম দেইনি!",
+      "ভুট্টা কোথায়? কুড় কুড়!",
+      "মোরগটা আজও দম্ভ করছে!",
+      "আমি এখন ডিমের উপর বসে আছি, বিরক্ত করো না!",
+      "তুমি মানুষ, আমি মুরগি, আমাদের কি প্রেম সম্ভব? 🐔❤️",
+      "কুড় কুড় কুড়র! এটা মুরগি ভাষায় 'সুপ্রভাত!'",
+      "কক কক! আজ ডিম নেই, শুধুই হাসি!"
+    ];
+
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const chat = document.getElementById("chat");
+
+      const userText = input.value;
+      if (!userText) return;
+
+      const userDiv = document.createElement("div");
+      userDiv.className = "message user";
+      userDiv.textContent = userText;
+      chat.appendChild(userDiv);
+
+      const botDiv = document.createElement("div");
+      botDiv.className = "message bot";
+      botDiv.textContent = replies[Math.floor(Math.random() * replies.length)];
+      chat.appendChild(botDiv);
+
+      input.value = "";
+    }
+  </script>
+</body>
+</html>
